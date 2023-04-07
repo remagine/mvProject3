@@ -22,9 +22,9 @@ public class Main {
             while (true) {
                 String inputString = bufferedReader.readLine();
                 List<CommandSet> commandSets = new ArrayList<>();
-                String[] andandSplitArray = inputString.split(CommandType.ANDAND.name());
+                String[] andandSplitArray = inputString.split(CommandType.ANDAND.getCommandName());
                 Arrays.stream(andandSplitArray).forEach(str ->{
-                    String[] strArray = str.split(" ");
+                    String[] strArray = str.trim().split(" ");
                     String commandString = strArray[0];
                     commandSets.add(new CommandSet(CommandType.fromString(commandString), Arrays.asList(strArray).subList(1, strArray.length)));
                 });

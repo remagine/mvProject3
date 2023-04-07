@@ -2,7 +2,8 @@ package command.cat;
 
 import command.Command;
 
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,7 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Cat implements Command {
-    private final List<Path> filePaths;
+    private final List<Path> paths;
 
     public Cat(List<Path> filePaths) {
         if (filePaths == null) {
@@ -29,7 +30,7 @@ public class Cat implements Command {
             throw new NullPointerException(this.getClass().getName() + " path of file doesn't exist");
         }
 
-        this.filePaths = immutablePaths;
+        this.paths = immutablePaths;
     }
 
     public static Cat fromStringList(List<String> stringList) {
@@ -46,18 +47,50 @@ public class Cat implements Command {
         if (immutableStringList.stream().anyMatch(String::isEmpty)) {
             throw new NullPointerException(" list of item is empty");
         }
-        List<Path> immutablePathList = immutableStringList.stream().map(Paths::get).collect(Collectors.toUnmodifiableList());;
+        List<Path> immutablePathList = immutableStringList.stream().map(Paths::get).collect(Collectors.toUnmodifiableList());
+        ;
 
         return new Cat(immutablePathList);
     }
 
     @Override
     public void execute() {
+        OutputStream outputStream = System.out;
+        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, BYTE_BUFFER_SIZE);
+        byte[] buffer = new byte[BYTE_BUFFER_SIZE];
 
-        filePaths.forEach(path-> {
-            File file = Files.get
+        List<InputStream> inputStreams = paths.stream().map(path -> {
+            if (Files.notExists(path)) {
+                return new ByteArrayInputStream(("파일이 존재하지 않습니다. path : " + path).getBytes(StandardCharsets.UTF_8));
+            }
+
+            try {
+                return Files.newInputStream(path);
+            } catch (IOException e) {
+                return new ByteArrayInputStream(("파일이 존재하지 않습니다. path : " + path).getBytes(StandardCharsets.UTF_8));
+            }
+        }).collect(Collectors.toList());
+
+        inputStreams.forEach(inputStream -> {
+            try (inputStream;
+                 BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, BYTE_BUFFER_SIZE);
+            ) {
+                while (true) {
+                    int len = bufferedInputStream.read(buffer);
+                    if (len == -1) {
+                        break;
+                    }
+                    bufferedOutputStream.write(buffer, 0, len);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
-
+        try {
+            bufferedOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

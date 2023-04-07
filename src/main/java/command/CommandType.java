@@ -11,6 +11,10 @@ public enum CommandType {
         this.commandName = commandName;
     }
 
+    public String getCommandName() {
+        return commandName;
+    }
+
     public static CommandType fromString(String commandName) {
         return Arrays
                 .stream(CommandType.values())
