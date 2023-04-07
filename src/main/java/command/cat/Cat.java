@@ -2,6 +2,7 @@ package command.cat;
 
 import command.Command;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,6 +53,11 @@ public class Cat implements Command {
 
     @Override
     public void execute() {
+
+        filePaths.forEach(path-> {
+            File file = Files.get
+        });
+
 
     }
 }

@@ -7,7 +7,4 @@ public interface Command {
     int CHAR_BUFFER_SIZE = BYTE_BUFFER_SIZE /2;
 
     public void execute() throws IOException;
-
-
-
 }

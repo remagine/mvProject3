@@ -35,8 +35,6 @@ public class Cp implements Command {
         return new Cp(originPath, destinationPath);
     }
 
-
-
     @Override
     public void execute() {
         try {
