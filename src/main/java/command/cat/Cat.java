@@ -48,7 +48,6 @@ public class Cat implements Command {
             throw new NullPointerException(" list of item is empty");
         }
         List<Path> immutablePathList = immutableStringList.stream().map(Paths::get).collect(Collectors.toUnmodifiableList());
-        ;
 
         return new Cat(immutablePathList);
     }
