@@ -7,7 +7,6 @@ import command.mv.Mv;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,6 +72,5 @@ public class Main {
         }
 
         command.execute();
-
     }
 }
