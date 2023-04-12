@@ -23,10 +23,11 @@ public class Main {
                 String inputString = bufferedReader.readLine();
                 List<CommandSet> commandSets = new ArrayList<>();
                 String[] andandSplitArray = inputString.split(CommandType.ANDAND.getCommandName());
-                Arrays.stream(andandSplitArray).forEach(str ->{
+                Arrays.stream(andandSplitArray).forEach(str -> {
                     String[] strArray = str.trim().split(" ");
                     String commandString = strArray[0];
-                    commandSets.add(new CommandSet(CommandType.fromString(commandString), Arrays.asList(strArray).subList(1, strArray.length)));
+                    List<String> arguments = Arrays.asList(strArray).subList(1, strArray.length);
+                    commandSets.add(new CommandSet(CommandType.fromString(commandString), arguments));
                 });
                 commandSets.forEach(commandSet -> {
                     try {
